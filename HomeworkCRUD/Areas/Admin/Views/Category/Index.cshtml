@@ -27,7 +27,9 @@
                                         <td>@category.Id</td>
                                         <td>@category.Name</td>
                                         <td>
-                                            <form method="post" asp-action="Delete">
+                                            <a asp-controller="Category" asp-action="Update" asp-route-id="@category.Id" class="btn btn-warning">Update</a>
+
+                                            <form method="post" asp-action="Delete" class="d-inline">
                                                 <input value="@category.Id" name="id" type="hidden"/>
                                             <button type="submit" class="btn btn-danger">Remove</button>
                                             </form>                                

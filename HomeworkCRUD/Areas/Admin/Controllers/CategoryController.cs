@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeworkCRUD.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class CategoryController : Controller
+
+    public class CategoryController : AdminController
     {
         private readonly AppDbContext _dbContext;
 
@@ -59,6 +59,34 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));    
+        }
+
+        public IActionResult Update(int id)
+        {
+            var category = _dbContext.Categories.Find(id);
+
+            if (category == null) return NotFound();
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, Category category)
+        {
+            if (!ModelState.IsValid) return View(category);
+
+            if (id != category.Id) return BadRequest();
+            var existCategory = await _dbContext.Categories.AnyAsync(x => x.Name == category.Name && x.Id != category.Id);
+            if (existCategory)
+            {
+                ModelState.AddModelError("Name", $"{category.Name} - this name is exist!");
+                return View(category);
+            }
+            var dbCategory = await _dbContext.Categories.FindAsync(id);
+            if (dbCategory == null) return NotFound();
+            dbCategory.Name = category.Name;
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

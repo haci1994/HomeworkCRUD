@@ -1,0 +1,24 @@
+﻿@model Category
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Updating category - @Model.Name</h4>
+
+                    <form method="post" class="forms-sample">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Change Name @Model.Name">
+                            <br />
+                            <span asp-validation-for="Name" class="small badge badge-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Update</button>
+                        <a class="btn btn-light" asp-controller="Category" asp-action="Index">Cancel</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
