@@ -76,16 +76,24 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
             if (!ModelState.IsValid) return View(category);
 
             if (id != category.Id) return BadRequest();
+
             var existCategory = await _dbContext.Categories.AnyAsync(x => x.Name == category.Name && x.Id != category.Id);
+          
             if (existCategory)
             {
                 ModelState.AddModelError("Name", $"{category.Name} - this name is exist!");
                 return View(category);
             }
+           
             var dbCategory = await _dbContext.Categories.FindAsync(id);
+           
             if (dbCategory == null) return NotFound();
+           
             dbCategory.Name = category.Name;
+           
             await _dbContext.SaveChangesAsync();
+
+
             return RedirectToAction(nameof(Index));
         }
     }
