@@ -1,5 +1,6 @@
 ﻿using HomeworkCRUD.DataContext.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace HomeworkCRUD.DataContext
 {
@@ -12,5 +13,7 @@ namespace HomeworkCRUD.DataContext
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<HeaderElement> HeaderElements { get; set; }
+        public DbSet<Social> Socials { get; set; }
     }
 }

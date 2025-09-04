@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeworkCRUD.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250902184532_init")]
+    [Migration("20250904082109_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -39,6 +39,25 @@ namespace HomeworkCRUD.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("HomeworkCRUD.DataContext.Models.HeaderElement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HeaderElements");
                 });
 
             modelBuilder.Entity("HomeworkCRUD.DataContext.Models.Product", b =>
@@ -101,6 +120,27 @@ namespace HomeworkCRUD.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
+                });
+
+            modelBuilder.Entity("HomeworkCRUD.DataContext.Models.Social", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Socials");
                 });
 
             modelBuilder.Entity("HomeworkCRUD.DataContext.Models.Product", b =>
