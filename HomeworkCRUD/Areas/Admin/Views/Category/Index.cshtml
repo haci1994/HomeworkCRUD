@@ -1,0 +1,45 @@
+﻿@using HomeworkCRUD.DataContext.Models
+@{
+    List<Category> categories = Model;
+}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Categories</h4>
+                    
+                    <div class="table-responsive">
+                        <a class="btn btn-primary" asp-controller="Category" asp-action="AddCategory">Add new Category</a>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var category in categories)
+                                {
+                                    <tr>
+                                        <td>@category.Id</td>
+                                        <td>@category.Name</td>
+                                        <td>
+                                            <form method="post" asp-action="Delete">
+                                                <input value="@category.Id" name="id" type="hidden"/>
+                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                            </form>
+                                
+                                        </td>
+                                    </tr>
+                                }                             
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
