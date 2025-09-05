@@ -30,6 +30,7 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCategory(Category category)
         {
             if (!ModelState.IsValid) return View(category);
@@ -49,6 +50,7 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var category = _dbContext.Categories.Find(id);
@@ -71,6 +73,7 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, Category category)
         {
             if (!ModelState.IsValid) return View(category);

@@ -136,12 +136,12 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int Id)
+        public async Task<IActionResult> Update(int id)
         {
             var product = await _dbContext.Products
                 .Include(x=> x.ProductImages)
                 .Include(z=> z.Category)
-                .FirstOrDefaultAsync(p=> p.Id == Id);
+                .FirstOrDefaultAsync(p=> p.Id == id);
 
             if (product == null) return NotFound();
 
@@ -156,6 +156,87 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
             };
 
             return View(productUpdateViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int id, ProductUpdateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Please correct the errors and try again.");
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+            var product = await _dbContext.Products
+                .Include(x => x.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null) return NotFound();
+
+            if (!await _dbContext.Categories.AnyAsync(x => x.Id == model.CategoryId))
+            {
+                ModelState.AddModelError("CategoryId", "The selected category does not exist.");
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+
+            if (model.CoverImageFile != null)
+            {
+                if (!model.CoverImageFile.IsImage())
+                {
+                    ModelState.AddModelError("CoverImageFile", "The uploaded file must be an image.");
+                    model.Categories = await GetCategories();
+                    return View(model);
+                }
+
+                if (model.CoverImageFile.Length > 2 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("CoverImageFile", "The image size must not exceed 2MB.");
+                    model.Categories = await GetCategories();
+                    return View(model);
+                }
+
+                var uniqueFileName = await model.CoverImageFile.GenerateFileAsync(PathConstants.ProductPath);
+
+                product.CoverImageUrl = uniqueFileName;
+            }
+
+            if (model.ImageFiles != null && model.ImageFiles.Count > 0)
+            {
+                foreach (var imageFile in model.ImageFiles)
+                {
+                    if (!imageFile.IsImage() || imageFile.Length > 2 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ImageFiles", "All additional images must be valid images and not exceed 2MB each.");
+                        model.Categories = await GetCategories();
+                        return View(model);
+                    }
+                }
+
+                var productImages = new List<ProductImage>();
+
+                foreach (var imageFile in model.ImageFiles)
+                {
+                    var imageFileName = await imageFile.GenerateFileAsync(PathConstants.ProductPath);
+
+                    var productImage = new ProductImage
+                    {
+                        ImageUrl = imageFileName
+                    };
+
+                    productImages.Add(productImage);
+                }
+
+                product.ProductImages.AddRange(productImages);
+            }
+
+            product.Name = model.Name;
+            product.Price = model.Price;
+            product.CategoryId = model.CategoryId;
+
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<List<SelectListItem>> GetCategories()

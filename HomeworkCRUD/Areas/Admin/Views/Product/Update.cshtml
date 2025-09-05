@@ -31,15 +31,20 @@
 
                             <br />
                             <br />
-
+                            @Html.AntiForgeryToken()
                             <label>Other Images</label>
                             <br />
                             @foreach (var img in Model.Images!)
                             {
-                                <img style="width:100px" src="~/img/product/@img.ImageUrl" />
-                                <button class="btn btn-sm btn-danger" onclick="deleteImage(@img.Id)">X</button>
-                                <br/>
-                                <br/>
+                                {
+                                    <div id="img-@img.Id" class="mb-2 d-flex align-items-center gap-2">
+                                        <img style="width:100px" src="~/img/product/@img.ImageUrl" />
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                                onclick="deleteImage(@img.Id, this)">
+                                            X
+                                        </button>
+                                    </div>
+                                }
                             }                            
                             <input asp-for="ImageFiles" />
                             <span asp-validation-for="ImageFiles" class="small badge badge-danger"></span>
@@ -55,3 +60,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    const removeUrl = '@Url.Action("Remove", "ProductImage", new { area = "Admin" })';
+
+    function getCsrf() {
+        return document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? '';
+    }
+
+    async function deleteImage(id, btn) {
+        if (!confirm("Şəkli silmək istədiyinizə əminsiniz?")) return;
+
+        try {
+            const res = await fetch(`${removeUrl}?id=${id}`, {
+                method: "POST",
+                headers: { "RequestVerificationToken": getCsrf() }
+            });
+
+            if (!res.ok) { alert("Error while deleting image"); return; }
+
+            const data = await res.json();
+            if (data.ok) {
+                // Yalnız DOM-dan sil — səhifə yerində qalır
+                document.getElementById(`img-${id}`)?.remove();
+            } else {
+                alert("Error while deleting image");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error while deleting image");
+        }
+    }
+</script>
