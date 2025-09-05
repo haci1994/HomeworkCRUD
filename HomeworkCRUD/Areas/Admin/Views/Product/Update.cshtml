@@ -1,0 +1,57 @@
+﻿@model ProductUpdateViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Updating the product - @Model.Name</h4>
+
+                    <form method="post" class="forms-sample" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Product Name">
+                            <br />
+                            <span asp-validation-for="Name" class="small badge badge-danger"></span>
+
+                            <label>Price</label>
+                            <input asp-for="Price" class="form-control" placeholder="Product Name">
+                            <br />
+                            <span asp-validation-for="Price" class="small badge badge-danger"></span>
+
+                            <label>Category</label>
+                            <select asp-items="Model.Categories" asp-for="CategoryId" class="form-control"></select>
+                            <br />
+                            <span asp-validation-for="CategoryId" class="small badge badge-danger"></span>
+
+                            <label>Cover Image</label>
+                            <img style="width:200px" src="~/img/product/@Model.CoverImageUrl"/>                            
+                            <input asp-for="CoverImageFile" />
+                            <span asp-validation-for="CoverImageFile" class="small badge badge-danger"></span>
+
+                            <br />
+                            <br />
+
+                            <label>Other Images</label>
+                            <br />
+                            @foreach (var img in Model.Images!)
+                            {
+                                <img style="width:100px" src="~/img/product/@img.ImageUrl" />
+                                <button class="btn btn-sm btn-danger" onclick="deleteImage(@img.Id)">X</button>
+                                <br/>
+                                <br/>
+                            }                            
+                            <input asp-for="ImageFiles" />
+                            <span asp-validation-for="ImageFiles" class="small badge badge-danger"></span>
+
+
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Add</button>
+                        <a class="btn btn-light" asp-controller="Category" asp-action="Index">Cancel</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

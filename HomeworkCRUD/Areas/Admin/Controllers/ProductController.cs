@@ -136,6 +136,28 @@ namespace HomeworkCRUD.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Update(int Id)
+        {
+            var product = await _dbContext.Products
+                .Include(x=> x.ProductImages)
+                .Include(z=> z.Category)
+                .FirstOrDefaultAsync(p=> p.Id == Id);
+
+            if (product == null) return NotFound();
+
+            var productUpdateViewModel = new ProductUpdateViewModel
+            {
+                Name = product.Name,
+                Price = product.Price,
+                CategoryId = product.CategoryId,
+                Categories = await GetCategories(),
+                CoverImageUrl = product.CoverImageUrl,
+                Images = product.ProductImages.ToList()
+            };
+
+            return View(productUpdateViewModel);
+        }
+
         public async Task<List<SelectListItem>> GetCategories()
         {
             var categories = await _dbContext.Categories.ToListAsync();
