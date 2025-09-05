@@ -1,3 +1,4 @@
+using HomeworkCRUD.Areas.Admin.Data;
 using HomeworkCRUD.DataContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,9 @@ namespace HomeworkCRUD
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            PathConstants.SliderPath = Path.Combine(builder.Environment.WebRootPath, "img", "slider");
+            PathConstants.ProductPath = Path.Combine(builder.Environment.WebRootPath, "img", "product");
 
             var app = builder.Build();
 

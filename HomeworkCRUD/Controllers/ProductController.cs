@@ -1,4 +1,5 @@
 ﻿using HomeworkCRUD.DataContext;
+using HomeworkCRUD.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +17,18 @@ namespace HomeworkCRUD.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _dbContext.Products.ToListAsync();
+            var categories = await _dbContext.Categories.ToListAsync();
 
-            return View(products);
+            if (products == null) return NotFound();
+            if (categories == null) return NotFound();
+
+            var model = new ShopViewModel
+            {
+                Products = products,
+                Categories = categories
+            };
+
+            return View(model);
         }
 
         public async Task<IActionResult> Details(int? id)

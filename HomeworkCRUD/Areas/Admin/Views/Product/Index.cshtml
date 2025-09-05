@@ -11,13 +11,14 @@
                     <h4 class="card-title">Categories</h4>
 
                     <div class="table-responsive">
-                        <a class="btn btn-primary" asp-controller="Category" asp-action="AddProduct">Add new Product</a>
+                        <a class="btn btn-primary" asp-controller="Product" asp-action="Create">Add new Product</a>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
                                     <th>Image</th>
                                     <th>Name</th>
+                                    <th>Price</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -26,8 +27,9 @@
                                 {
                                     <tr>
                                         <td>@product.Id</td>
-                                        <td class="w-25"><img src="~/img/product/@product.CoverImageUrl" class="w-25 h-25"/></td>
+                                        <td style="width:100px"><img src="~/img/product/@product.CoverImageUrl"/></td>
                                         <td>@product.Name</td>
+                                        <td>$ @product.Price</td>
                                         <td>
                                             <a asp-controller="Product" asp-area="" asp-action="Details" asp-route-id="@product.Id" class="btn btn-info" target="_blank">Details</a>
 

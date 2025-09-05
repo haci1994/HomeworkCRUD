@@ -12,13 +12,13 @@
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
                         <img class="product__details__pic__item--large"
-                             src="~/img/product/details/@product.ProductImages[0].ImageUrl" alt="">
+                             src="~/img/product/@product.CoverImageUrl" alt="">
                     </div>
                     <div class="product__details__pic__slider owl-carousel">
                         @foreach(var item in product.ProductImages)
                         {
-                            <img data-imgbigurl="img/product/details/@item.ImageUrl"
-                                 src="~/img/product/details/@item.ImageUrl" alt="">
+                            <img data-imgbigurl="~/img/product/details/@item.ImageUrl"
+                                 src="~/img/product/@item.ImageUrl" alt="">
                         }
                     </div>
                 </div>
